@@ -32,12 +32,12 @@ public class QrCodeController {
     @PostMapping("generate/v1")
     @ResponseBody
     public BaseResponse generateV1(String content){
-        BaseResponse response=new BaseResponse(StatusCode.Success);
+        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
         try {
             final String fileName=LOCALDATEFORMAT.get().format(new Date());
             QRCodeUtil.createCodeToFile(content,new File(RootPath),fileName+FileFormat);
         }catch (Exception e){
-            response=new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
+            response=new BaseResponse(StatusCode.FAIL.getCode(),e.getMessage());
         }
         return response;
     }
@@ -46,7 +46,7 @@ public class QrCodeController {
     @PostMapping("generate/v2")
     @ResponseBody
     public BaseResponse generateV2(String content, HttpServletResponse servletResponse){
-        BaseResponse response=new BaseResponse(StatusCode.Success);
+        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
         content="11111110";
         try {
             QRCodeUtil.createCodeToOutputStream(content,servletResponse.getOutputStream());
