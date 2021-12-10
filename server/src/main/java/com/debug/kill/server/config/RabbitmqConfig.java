@@ -1,10 +1,7 @@
 package com.debug.kill.server.config;
 
-import cn.hutool.json.JSONUtil;
-import com.debug.kill.server.dto.KillDto;
 import com.debug.kill.server.service.RabbitSenderService;
 import com.google.common.collect.Maps;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -15,12 +12,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import javax.servlet.MultipartConfigElement;
 import java.util.Map;
 
 /**

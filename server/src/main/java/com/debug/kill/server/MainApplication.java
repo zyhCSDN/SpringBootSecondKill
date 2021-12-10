@@ -7,9 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+//import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @Author:zyh
@@ -20,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //@ImportResource(value = "classpath:spring/spring-shiro.xml")
 @MapperScan(basePackages = "com.debug.kill.model.mapper")
 //@EnableScheduling
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class MainApplication extends SpringBootServletInitializer {
 
     @Override

@@ -1,6 +1,5 @@
 package com.debug.kill.server.controller;
 
-import com.debug.kill.model.entity.Lock;
 import com.debug.kill.server.dto.UserEntity;
 import com.debug.kill.server.utils.RedisUtil;
 import com.debug.kill.server.utils.SnowFlake;
@@ -81,19 +80,4 @@ public class RedisController {
         return redisUtil.getExpire(key);
     }
 
-
-    /**
-     * 测试redis分布式锁
-     *
-     * @return
-     */
-
-    @RequestMapping("lock")
-    public boolean lock() {
-        Lock lock = new Lock("lockKer", "ssss");
-        if (redisUtil.tryLock(lock)) {
-            redisUtil.releaseLock(lock);
-        }
-        return redisUtil.tryLock(lock);
-    }
 }

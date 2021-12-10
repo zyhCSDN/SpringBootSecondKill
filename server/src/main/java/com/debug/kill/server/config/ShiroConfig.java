@@ -50,6 +50,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/item/detail","authc");
 
         filterChainDefinitionMap.put("/**","anon");
+
+        //权限
+        filterChainDefinitionMap.put("/swagger-ui.html**", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

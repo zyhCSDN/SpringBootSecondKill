@@ -2,6 +2,9 @@ package com.debug.kill.server.service;/**
  * Created by Administrator on 2019/6/21.
  */
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.debug.kill.model.dto.KillSuccessUserInfo;
 import com.debug.kill.model.entity.ItemKillSuccess;
 import com.debug.kill.model.mapper.ItemKillSuccessMapper;
@@ -10,7 +13,6 @@ import com.debug.kill.server.dto.MailDto;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cn.hutool.json.JSONUtil;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +117,7 @@ public class RabbitReceiverService {
                 //采用任何一种加分布锁的处理方法都是可行的
                 //TODO 此步骤非常重要,Jmeter压测,发送抢单的大批量请求
                 String str = new String(message.getBody(),"utf-8");
-                KillDto dto = JSONUtil.toBean(str, KillDto.class);
+                KillDto dto = JSONObject.parseObject(str, KillDto.class);
 //               todo 避免消息重复消费 方法一： 在消息消费时，要求消息体中必须要有一个唯一Id（对于同一业务全局唯一，如支付ID、订单ID、帖子ID等）
 //                作为去重的依据，避免同一条消息被重复消费
 //                 方法二：消费消息接口做幂等处理
