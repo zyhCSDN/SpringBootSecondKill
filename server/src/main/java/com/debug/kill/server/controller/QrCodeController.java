@@ -3,6 +3,7 @@ package com.debug.kill.server.controller;
 import com.debug.kill.api.enums.StatusCode;
 import com.debug.kill.api.response.BaseResponse;
 import com.debug.kill.server.utils.QRCodeUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Controller
 @RequestMapping("qr/code")
 @Slf4j
+@Api(tags = "二维码")
 public class QrCodeController {
 
 

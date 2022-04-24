@@ -11,6 +11,7 @@ import com.debug.kill.server.service.CheckService;
 import com.debug.kill.server.service.IKillService;
 import com.debug.kill.server.service.RabbitSenderService;
 import com.google.common.collect.Maps;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import java.util.Objects;
  * @Date: 2019/6/17 22:14
  **/
 @Controller
+@Api(tags = "秒杀列表")
 public class KillController {
 
     private static final Logger log = LoggerFactory.getLogger(KillController.class);

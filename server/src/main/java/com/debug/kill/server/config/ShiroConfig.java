@@ -51,7 +51,7 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/**","anon");
 
-        //权限
+//        swagger权限
         filterChainDefinitionMap.put("/swagger-ui.html**", "anon");
         filterChainDefinitionMap.put("/v2/api-docs", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");

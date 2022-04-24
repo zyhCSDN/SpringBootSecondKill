@@ -2,6 +2,7 @@ package com.debug.kill.server.controller;/**
  * Created by Administrator on 2019/7/2.
  */
 
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Date: 2019/7/2 17:45
  **/
 @Controller
+@Api(tags = "用户模块")
 public class UserController {
 
     private static final Logger log= LoggerFactory.getLogger(UserController.class);

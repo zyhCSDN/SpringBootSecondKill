@@ -3,9 +3,9 @@ package com.debug.kill.server.controller;
 import com.debug.kill.server.dto.UserEntity;
 import com.debug.kill.server.utils.RedisUtil;
 import com.debug.kill.server.utils.SnowFlake;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static java.lang.String.valueOf;
 
@@ -30,6 +27,7 @@ import static java.lang.String.valueOf;
 @Component
 @RequestMapping("/redis")
 @RestController
+@Api(tags = "redis测试")
 public class RedisController {
 
    private SnowFlake snowFlake = new SnowFlake(2, 3);

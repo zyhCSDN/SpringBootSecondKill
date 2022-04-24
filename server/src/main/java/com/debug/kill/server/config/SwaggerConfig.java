@@ -8,10 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -26,6 +23,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
+//public class SwaggerConfig extends WebMvcConfigurationSupport {
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 
 
@@ -41,10 +39,11 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     public Docket createRestApi(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .enable(true)
                 .select()
                 //在controller包下以及子包下的controller类,你放其他包下可能就没用了
 //                .apis(RequestHandlerSelectors.basePackage("com.debug.kill.server.controller"))
-                //任何包
+                //生成api的任何包
                 .apis(RequestHandlerSelectors.any())
                 // 对所有路径进行监控
                 .paths(path -> !"/error".equals(path))
@@ -98,13 +97,19 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     /**
      * 创建该API的基本信息（这些基本信息会展现在文档页面中）
      * 访问地址：http://项目实际地址/swagger-ui.html
+     *
+     *
+     * 把Swagger2的API接口导入Postman 复制 http://127.0.0.1:8092/v2/api-docs  打开postman-->import-->import Form Link
+     *
      * @return
      */
     private ApiInfo apiInfo() {
+        Contact contact = new Contact("zyh", "", "1461264354@qq.com");
         return new ApiInfoBuilder()
                 //就是说这个界面叫什么名字
-                .title("kill秒杀测试接口")
+                .title("kill秒杀及高并发插入数据测试接口")
                 .description("Zhaoyongheng会变强的")
+                .contact(contact)
                 .termsOfServiceUrl("http://127.0.0.1:8092/swagger-ui.html")
                 //对这个界面的描述
                 .version("1.0")

@@ -4,6 +4,7 @@ package com.debug.kill.server.controller;/**
 
 import com.debug.kill.model.entity.ItemKill;
 import com.debug.kill.server.service.IItemService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.Set;
  * @Date: 2019/6/16 22:41
  **/
 @Controller
+@Api(tags = "商品列表")
 public class ItemController {
 
     private static final Logger log= LoggerFactory.getLogger(ItemController.class);

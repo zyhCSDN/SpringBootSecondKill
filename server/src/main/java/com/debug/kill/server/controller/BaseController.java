@@ -4,6 +4,7 @@ package com.debug.kill.server.controller;/**
 
 import com.debug.kill.api.enums.StatusCode;
 import com.debug.kill.api.response.BaseResponse;
+import com.debug.kill.model.entity.Student;
 import com.debug.kill.model.mapper.RandomCodeMapper;
 import com.debug.kill.server.thread.CodeGenerateSnowThread;
 import com.debug.kill.server.thread.CodeGenerateThread;
@@ -17,12 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -116,7 +115,7 @@ public class BaseController {
         BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
         try {
             ExecutorService executorService=Executors.newFixedThreadPool(10);
-            for (int i=0;i<1000;i++){
+            for (int i=0;i<100;i++){
                 executorService.execute(new CodeGenerateThread(randomCodeMapper));
             }
         }catch (Exception e){
@@ -141,6 +140,23 @@ public class BaseController {
                 executorService.execute(new CodeGenerateSnowThread(randomCodeMapper,redisTemplate));
             }
             response.setData("十万数据插入成功");
+        }catch (Exception e){
+            response=new BaseResponse(StatusCode.FAIL.getCode(),e.getMessage());
+        }
+        return response;
+    }
+
+
+    /**
+     * 测试在高并发下多线程生成订单编号-雪花算法
+     * @return
+     */
+    @RequestMapping(value = "/code/generate/thread/snow1",method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse codeThreadSnowFlake1(@RequestBody Map<String ,Object> student){
+        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
+        try {
+            response.setData(student);
         }catch (Exception e){
             response=new BaseResponse(StatusCode.FAIL.getCode(),e.getMessage());
         }

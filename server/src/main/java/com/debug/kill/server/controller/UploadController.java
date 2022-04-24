@@ -5,6 +5,7 @@ import com.debug.kill.api.response.BaseResponse;
 import com.debug.kill.server.exception.GlobalException;
 import com.debug.kill.server.utils.COSClientInit;
 import com.qcloud.cos.transfer.Upload;
+import io.swagger.annotations.Api;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("/upload")
+@Api(tags = "图片上传")
 public class UploadController {
 
     public static final String LOCALPATH = "D:/data/file/";

@@ -41,9 +41,9 @@ public class CheckService {
          * 4.没有太具体的业务场景，不设置过期时间(可以设置过期时间，60s秒，60秒之后，redis里的信息自动删除)
          */
         String property = env.getProperty( "spring.redis.timeout" );
-        Long aLong = Long.valueOf(property)/1000;
-        return StringRedisTemplate.opsForValue().setIfAbsent(key,Integer.toString( i ), aLong, TimeUnit.SECONDS);
-//        return StringRedisTemplate.opsForValue().setIfAbsent(key,Integer.toString( i ));
+//        Long aLong = Long.valueOf(property)/1000;
+//        return StringRedisTemplate.opsForValue().setIfAbsent(key,Integer.toString( i ), aLong, TimeUnit.SECONDS);
+        return StringRedisTemplate.opsForValue().setIfAbsent(key,Integer.toString( i ));
 
 
         /* 老代码，代码冗余，未加锁，线程不安全
