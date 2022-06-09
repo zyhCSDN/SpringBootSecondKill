@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- *
  * 全局异常
  *
  * @author:ZHAOYONGHENG
@@ -32,14 +31,14 @@ public class GlobalExceptionHandler {
     public BaseResponse exceptionHandler(HttpServletRequest request, Exception e) {
         e.printStackTrace();
         if (e instanceof GlobalException) {
-            GlobalException ex = (GlobalException)e;
+            GlobalException ex = (GlobalException) e;
             return new BaseResponse(ex.getStatusCode());
-        } else if (e instanceof BindException){
-            BindException ex = (BindException)e;
+        } else if (e instanceof BindException) {
+            BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
             ObjectError error = errors.get(0);
             String msg = error.getDefaultMessage();
-            return new BaseResponse(StatusCode.SERVER_ERROR.getCode(),msg);
+            return new BaseResponse(StatusCode.SERVER_ERROR.getCode(), msg);
         } else {
             return new BaseResponse(StatusCode.SERVER_ERROR);
         }

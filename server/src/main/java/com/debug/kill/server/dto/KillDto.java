@@ -14,7 +14,7 @@ import java.io.Serializable;
  **/
 @Data
 @ToString
-public class KillDto implements Serializable{
+public class KillDto implements Serializable {
 
     //全局唯一id,避免消息被重复消费
     private Long globallyNniQueId;

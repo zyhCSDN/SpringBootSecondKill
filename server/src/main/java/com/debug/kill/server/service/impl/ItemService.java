@@ -19,13 +19,14 @@ import java.util.List;
 @Service
 public class ItemService implements IItemService {
 
-    private static final Logger log= LoggerFactory.getLogger(ItemService.class);
+    private static final Logger log = LoggerFactory.getLogger(ItemService.class);
 
     @Autowired
     private ItemKillMapper itemKillMapper;
 
     /**
      * 获取待秒杀商品列表
+     *
      * @return
      * @throws Exception
      */
@@ -36,14 +37,15 @@ public class ItemService implements IItemService {
 
     /**
      * 获取秒杀详情
+     *
      * @param id
      * @return
      * @throws Exception
      */
     @Override
     public ItemKill getKillDetail(Integer id) throws Exception {
-        ItemKill entity=itemKillMapper.selectById(id);
-        if (entity==null){
+        ItemKill entity = itemKillMapper.selectById(id);
+        if (entity == null) {
             throw new Exception("获取秒杀详情-待秒杀商品记录不存在");
         }
         return entity;

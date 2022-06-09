@@ -25,21 +25,21 @@ import java.util.Date;
 public class QrCodeController {
 
 
-    private static final String RootPath="E:\\shFiles\\QRCode";
-    private static final String FileFormat=".png";
+    private static final String RootPath = "E:\\shFiles\\QRCode";
+    private static final String FileFormat = ".png";
 
-    private static final ThreadLocal< SimpleDateFormat > LOCALDATEFORMAT=ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMddHHmmss"));
+    private static final ThreadLocal<SimpleDateFormat> LOCALDATEFORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMddHHmmss"));
 
     //生成二维码并将其存放于本地目录
     @PostMapping("generate/v1")
     @ResponseBody
-    public BaseResponse generateV1(String content){
-        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
+    public BaseResponse generateV1(String content) {
+        BaseResponse response = new BaseResponse(StatusCode.SUCCESS);
         try {
-            final String fileName=LOCALDATEFORMAT.get().format(new Date());
-            QRCodeUtil.createCodeToFile(content,new File(RootPath),fileName+FileFormat);
-        }catch (Exception e){
-            response=new BaseResponse(StatusCode.FAIL.getCode(),e.getMessage());
+            final String fileName = LOCALDATEFORMAT.get().format(new Date());
+            QRCodeUtil.createCodeToFile(content, new File(RootPath), fileName + FileFormat);
+        } catch (Exception e) {
+            response = new BaseResponse(StatusCode.FAIL.getCode(), e.getMessage());
         }
         return response;
     }
@@ -47,23 +47,23 @@ public class QrCodeController {
     //生成二维码并将其返回给前端调用者
     @PostMapping("generate/v2")
     @ResponseBody
-    public BaseResponse generateV2(String content, HttpServletResponse servletResponse){
-        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
-        content="11111110";
+    public BaseResponse generateV2(String content, HttpServletResponse servletResponse) {
+        BaseResponse response = new BaseResponse(StatusCode.SUCCESS);
+        content = "11111110";
         try {
-            QRCodeUtil.createCodeToOutputStream(content,servletResponse.getOutputStream());
-        }catch (Exception e){
-           new Throwable(e.getMessage());
+            QRCodeUtil.createCodeToOutputStream(content, servletResponse.getOutputStream());
+        } catch (Exception e) {
+            new Throwable(e.getMessage());
         }
         return response;
     }
 
     //生成二维码并将其返回给前端调用者
     @RequestMapping("generate/v3/{content}")
-    public void generateV3(@PathVariable String content, HttpServletResponse servletResponse){
+    public void generateV3(@PathVariable String content, HttpServletResponse servletResponse) {
         try {
-            QRCodeUtil.createCodeToOutputStream(content,servletResponse.getOutputStream());
-        }catch (Exception e){
+            QRCodeUtil.createCodeToOutputStream(content, servletResponse.getOutputStream());
+        } catch (Exception e) {
             new Throwable(e.getMessage());
         }
     }

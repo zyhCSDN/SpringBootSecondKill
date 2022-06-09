@@ -30,7 +30,7 @@ import static java.lang.String.valueOf;
 @Api(tags = "redis测试")
 public class RedisController {
 
-   private SnowFlake snowFlake = new SnowFlake(2, 3);
+    private SnowFlake snowFlake = new SnowFlake(2, 3);
 
     private static Logger log = LoggerFactory.getLogger(RedisController.class);
 
@@ -39,14 +39,14 @@ public class RedisController {
     @Resource
     private RedisUtil redisUtil;
 
-        @RequestMapping("set")
+    @RequestMapping("set")
 //    @Scheduled(cron = "0/5 * * * * ? ") // 间隔5秒执行
     public boolean redisset() {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         log.info("------------------------------");
-        Map< String, Object > hashMap = new HashMap<>();
+        Map<String, Object> hashMap = new HashMap<>();
         long l = snowFlake.nextId();
         UserEntity userEntity = new UserEntity();
         userEntity.setId(Long.valueOf(l));

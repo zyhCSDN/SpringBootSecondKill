@@ -62,13 +62,13 @@ public class RabbitmqConfig {
      */
 
 
-
     /**
      * 单一消费者
+     *
      * @return
      */
     @Bean(name = "singleListenerContainer")
-    public SimpleRabbitListenerContainerFactory listenerContainer(){
+    public SimpleRabbitListenerContainerFactory listenerContainer() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
@@ -76,30 +76,31 @@ public class RabbitmqConfig {
         factory.setMaxConcurrentConsumers(1);
         factory.setPrefetchCount(1);
         factory.setTxSize(1);
-        log.info("调用单个消费者开始(此为邮件接收者RabbitReceiverService单一消费者配置)：{}",factory);
+        log.info("调用单个消费者开始(此为邮件接收者RabbitReceiverService单一消费者配置)：{}", factory);
         return factory;
     }
 
     /**
      * 多个消费者
+     *
      * @return
      */
     @Bean(name = "multiListenerContainer")
-    public SimpleRabbitListenerContainerFactory multiListenerContainer(){
+    public SimpleRabbitListenerContainerFactory multiListenerContainer() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factoryConfigurer.configure(factory,connectionFactory);
+        factoryConfigurer.configure(factory, connectionFactory);
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
         //确认消费模式-NONE(自动确认)-MANUAL(手动确认)
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-        factory.setConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.simple.concurrency",int.class));
-        factory.setMaxConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.simple.max-concurrency",int.class));
-        factory.setPrefetchCount(env.getProperty("spring.rabbitmq.listener.simple.prefetch",int.class));
-        log.info("调用多个消费者开始(此为异步秒杀MQ请求与用户秒杀成功后超时未支付-监听者 多个消费者配置)：{}",factory);
+        factory.setConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.simple.concurrency", int.class));
+        factory.setMaxConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.simple.max-concurrency", int.class));
+        factory.setPrefetchCount(env.getProperty("spring.rabbitmq.listener.simple.prefetch", int.class));
+        log.info("调用多个消费者开始(此为异步秒杀MQ请求与用户秒杀成功后超时未支付-监听者 多个消费者配置)：{}", factory);
         return factory;
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(){
+    public RabbitTemplate rabbitTemplate() {
         // https://juejin.cn/post/6844903924642611207
         //TODO 配置文件可以不用配置  手动配置确保消息正确地发送至RabbitMQ 将 channel 设置成 confirm 模式（发送方确认模式，消息确认发送）
 //        //消息发送成功确认，对应application.properties中的spring.rabbitmq.publisher-confirms=true
@@ -114,15 +115,15 @@ public class RabbitmqConfig {
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-                log.info("消息发送成功:correlationData({}),ack({}),cause({})",correlationData,ack,cause);
+                log.info("消息发送成功:correlationData({}),ack({}),cause({})", correlationData, ack, cause);
             }
         });
         //消息从exchange发送到queue失败回调  需设置：spring.rabbitmq.publisher-returns=true
         rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
-//            @SneakyThrows
+            //            @SneakyThrows
             @Override
             public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-                log.warn("消息丢失:exchange({}),route({}),replyCode({}),replyText({}),message:{}",exchange,routingKey,replyCode,replyText,message);
+                log.warn("消息丢失:exchange({}),route({}),replyCode({}),replyText({}),message:{}", exchange, routingKey, replyCode, replyText, message);
                 //todo 消息丢失，重新发送
 //                String str = new String(message.getBody(),"utf-8");
 //                KillDto dto = JSONUtil.toBean(str, KillDto.class);
@@ -135,84 +136,84 @@ public class RabbitmqConfig {
 
     //构建异步发送邮箱通知的消息模型
     @Bean
-    public Queue successEmailQueue(){
-        return new Queue(env.getProperty("mq.kill.item.success.email.queue"),true);
+    public Queue successEmailQueue() {
+        return new Queue(env.getProperty("mq.kill.item.success.email.queue"), true);
     }
 
     @Bean
-    public TopicExchange successEmailExchange(){
-        return new TopicExchange(env.getProperty("mq.kill.item.success.email.exchange"),true,false);
+    public TopicExchange successEmailExchange() {
+        return new TopicExchange(env.getProperty("mq.kill.item.success.email.exchange"), true, false);
     }
 
     @Bean
-    public Binding successEmailBinding(){
+    public Binding successEmailBinding() {
         return BindingBuilder.bind(successEmailQueue()).to(successEmailExchange()).with(env.getProperty("mq.kill.item.success.email.routing.key"));
     }
 
 
     //构建秒杀成功之后-订单超时未支付的死信队列消息模型
     @Bean
-    public Queue successKillDeadQueue(){
-        Map<String, Object> argsMap= Maps.newHashMap();
-        argsMap.put("x-dead-letter-exchange",env.getProperty("mq.kill.item.success.kill.dead.exchange"));
-        argsMap.put("x-dead-letter-routing-key",env.getProperty("mq.kill.item.success.kill.dead.routing.key"));
-        return new Queue(env.getProperty("mq.kill.item.success.kill.dead.queue"),true,false,false,argsMap);
+    public Queue successKillDeadQueue() {
+        Map<String, Object> argsMap = Maps.newHashMap();
+        argsMap.put("x-dead-letter-exchange", env.getProperty("mq.kill.item.success.kill.dead.exchange"));
+        argsMap.put("x-dead-letter-routing-key", env.getProperty("mq.kill.item.success.kill.dead.routing.key"));
+        return new Queue(env.getProperty("mq.kill.item.success.kill.dead.queue"), true, false, false, argsMap);
     }
 
     //基本交换机
     @Bean
-    public TopicExchange successKillDeadProdExchange(){
-        return new TopicExchange(env.getProperty("mq.kill.item.success.kill.dead.prod.exchange"),true,false);
+    public TopicExchange successKillDeadProdExchange() {
+        return new TopicExchange(env.getProperty("mq.kill.item.success.kill.dead.prod.exchange"), true, false);
     }
 
     //创建基本交换机+基本路由 -> 死信队列 的绑定
     @Bean
-    public Binding successKillDeadProdBinding(){
+    public Binding successKillDeadProdBinding() {
         return BindingBuilder.bind(successKillDeadQueue()).to(successKillDeadProdExchange()).with(env.getProperty("mq.kill.item.success.kill.dead.prod.routing.key"));
     }
 
     //真正的队列
     @Bean
-    public Queue successKillRealQueue(){
-        return new Queue(env.getProperty("mq.kill.item.success.kill.dead.real.queue"),true);
+    public Queue successKillRealQueue() {
+        return new Queue(env.getProperty("mq.kill.item.success.kill.dead.real.queue"), true);
     }
 
     //死信交换机
     @Bean
-    public TopicExchange successKillDeadExchange(){
-        return new TopicExchange(env.getProperty("mq.kill.item.success.kill.dead.exchange"),true,false);
+    public TopicExchange successKillDeadExchange() {
+        return new TopicExchange(env.getProperty("mq.kill.item.success.kill.dead.exchange"), true, false);
     }
 
     //死信交换机+死信路由->真正队列 的绑定
     @Bean
-    public Binding successKillDeadBinding(){
+    public Binding successKillDeadBinding() {
         return BindingBuilder.bind(successKillRealQueue()).to(successKillDeadExchange()).with(env.getProperty("mq.kill.item.success.kill.dead.routing.key"));
     }
 
     /**
      * (构造一个新队列，给定名称、持久性标志、自动删除标志和参数。)
-     *  name 队列的名称-不能为null；设置为“”以让代理生成该名称。
-     *  durable 如果声明持久队列，则为true（该队列将在服务器重新启动后继续有效）
-     *  exclusive 如果声明独占队列，则为true（该队列将仅由声明者的连接使用）
-     *  autoDelete 服务器应在队列不再使用时将其删除，则为true
-     *  arguments 用于声明队列的参数
+     * name 队列的名称-不能为null；设置为“”以让代理生成该名称。
+     * durable 如果声明持久队列，则为true（该队列将在服务器重新启动后继续有效）
+     * exclusive 如果声明独占队列，则为true（该队列将仅由声明者的连接使用）
+     * autoDelete 服务器应在队列不再使用时将其删除，则为true
+     * arguments 用于声明队列的参数
      */
     //TODO:RabbitMQ限流专用
     @Bean
-    public Queue executeLimitQueue(){
-        Map<String, Object> argsMap=Maps.newHashMap();
+    public Queue executeLimitQueue() {
+        Map<String, Object> argsMap = Maps.newHashMap();
         //限制channel中队列同一时刻通过的消息数量
-        argsMap.put("x-max-length", env.getProperty("spring.rabbitmq.listener.simple.prefetch",Integer.class));
-        return new Queue(env.getProperty("mq.kill.item.execute.limit.queue.name"),true,false,false,argsMap);
+        argsMap.put("x-max-length", env.getProperty("spring.rabbitmq.listener.simple.prefetch", Integer.class));
+        return new Queue(env.getProperty("mq.kill.item.execute.limit.queue.name"), true, false, false, argsMap);
     }
 
     @Bean
-    public TopicExchange executeLimitExchange(){
-        return new TopicExchange(env.getProperty("mq.kill.item.execute.limit.queue.exchange"),true,false);
+    public TopicExchange executeLimitExchange() {
+        return new TopicExchange(env.getProperty("mq.kill.item.execute.limit.queue.exchange"), true, false);
     }
 
     @Bean
-    public Binding executeLimitBinding(){
+    public Binding executeLimitBinding() {
         return BindingBuilder.bind(executeLimitQueue()).to(executeLimitExchange()).with(env.getProperty("mq.kill.item.execute.limit.queue.routing.key"));
     }
 }

@@ -17,5 +17,5 @@ public interface IKillService {
 
 //    Boolean killItemV5(Integer killId, Integer userId) throws Exception;
 
-    Map<String,Object> checkUserKillResult(Integer killId, Integer userId) throws Exception;
+    Map<String, Object> checkUserKillResult(Integer killId, Integer userId) throws Exception;
 }

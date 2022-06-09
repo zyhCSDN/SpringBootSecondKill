@@ -27,6 +27,6 @@ public interface ItemKillSuccessMapper {
 
     List<ItemKillSuccess> selectExpireOrders();
 
-    List<KillSuccessUserInfo> selectByKillIdUserId(@Param("killId") Integer killId,@Param("userId") Integer userId);
+    List<KillSuccessUserInfo> selectByKillIdUserId(@Param("killId") Integer killId, @Param("userId") Integer userId);
 
 }

@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 
 /**
  * 通用的发送邮件服务
+ *
  * @Author:debug (SteadyJack)
  * @Date: 2019/6/22 10:09
  **/
@@ -25,7 +26,7 @@ import javax.mail.internet.MimeMessage;
 @EnableAsync
 public class MailService {
 
-    private static final Logger log= LoggerFactory.getLogger(MailService.class);
+    private static final Logger log = LoggerFactory.getLogger(MailService.class);
 
     @Autowired
     private JavaMailSender mailSender;
@@ -38,9 +39,9 @@ public class MailService {
      * 发送简单文本文件
      */
     @Async
-    public void sendSimpleEmail(final MailDto dto){
+    public void sendSimpleEmail(final MailDto dto) {
         try {
-            SimpleMailMessage message=new SimpleMailMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(env.getProperty("mail.send.from"));
             message.setTo(dto.getTos());
             message.setSubject(dto.getSubject());
@@ -48,29 +49,30 @@ public class MailService {
             mailSender.send(message);
 
             log.info("发送简单文本文件-发送成功!");
-        }catch (Exception e){
-            log.error("发送简单文本文件-发生异常： ",e.fillInStackTrace());
+        } catch (Exception e) {
+            log.error("发送简单文本文件-发生异常： ", e.fillInStackTrace());
         }
     }
 
     /**
      * 发送花哨邮件
+     *
      * @param dto
      */
     @Async
-    public void sendHTMLMail(final MailDto dto){
+    public void sendHTMLMail(final MailDto dto) {
         try {
-            MimeMessage message=mailSender.createMimeMessage();
-            MimeMessageHelper messageHelper=new MimeMessageHelper(message,true,"utf-8");
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "utf-8");
             messageHelper.setFrom(env.getProperty("mail.send.from"));
             messageHelper.setTo(dto.getTos());
             messageHelper.setSubject(dto.getSubject());
-            messageHelper.setText(dto.getContent(),true);
+            messageHelper.setText(dto.getContent(), true);
 
             mailSender.send(message);
             log.info("发送花哨邮件-发送成功!");
-        }catch (Exception e){
-            log.error("发送花哨邮件-发生异常： ",e.fillInStackTrace());
+        } catch (Exception e) {
+            log.error("发送花哨邮件-发生异常： ", e.fillInStackTrace());
         }
     }
 }

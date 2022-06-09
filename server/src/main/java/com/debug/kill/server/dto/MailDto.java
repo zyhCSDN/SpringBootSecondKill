@@ -17,7 +17,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class MailDto implements Serializable{
+public class MailDto implements Serializable {
     //邮件主题
     private String subject;
     //邮件内容

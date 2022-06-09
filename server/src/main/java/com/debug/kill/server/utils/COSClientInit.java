@@ -30,14 +30,14 @@ public class COSClientInit {
 
     private static ThreadPoolExecutor executor = new ThreadPoolExecutor(4, 8, 10, TimeUnit.SECONDS, queue, policy);
 
-    static String bucketName = "zhaoyongheng"+ "-" +"1308629741"; //桶的名称
+    static String bucketName = "zhaoyongheng" + "-" + "1308629741"; //桶的名称
 
     /**
      * 高级api
      */
-    public static TransferManager transferManager = new TransferManager(COSClientInit.CreateCOSClient(),executor);
+    public static TransferManager transferManager = new TransferManager(COSClientInit.CreateCOSClient(), executor);
 
-    public static COSClient CreateCOSClient(){
+    public static COSClient CreateCOSClient() {
         // 1 初始化用户身份信息（secretId, secretKey）。
         // SECRETID和SECRETKEY请登录访问管理控制台 https://console.cloud.tencent.com/cam/capi 进行查看和管理
         //SecretId 是用于标识 API 调用者的身份
@@ -58,34 +58,37 @@ public class COSClientInit {
 
     /**
      * 获取存储桶列表
+     *
      * @return
      */
-    public static List<Bucket> getBucket(){
+    public static List<Bucket> getBucket() {
         return COSClientInit.CreateCOSClient().listBuckets();
     }
 
     /**
      * 上传文件到腾讯云对象存储
-     * @param file              文件对象
-     * @param bucketName        存储桶名称
-     * @param key               对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
+     *
+     * @param file       文件对象
+     * @param bucketName 存储桶名称
+     * @param key        对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
      * @return
      */
-    public static PutObjectResult uploadFile(File file, String bucketName , String key){
+    public static PutObjectResult uploadFile(File file, String bucketName, String key) {
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
         return COSClientInit.CreateCOSClient().putObject(putObjectRequest);
     }
 
     /**
      * 上传文件到腾讯云对象存储
-     * @param inputStream              文件对象
-     * @param key               对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
+     *
+     * @param inputStream 文件对象
+     * @param key         对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
      * @return
      */
-    public static String uploadFileV1(InputStream inputStream, String key){
-        ObjectMetadata objectMetadata = new  ObjectMetadata();
+    public static String uploadFileV1(InputStream inputStream, String key) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(0);
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, inputStream,objectMetadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, inputStream, objectMetadata);
         Upload upload = COSClientInit.transferManager.upload(putObjectRequest);
         URL url = COSClientInit.CreateCOSClient().generatePresignedUrl(bucketName, key, new Date(System.currentTimeMillis() + 5 * 60 * 10000), HttpMethodName.PUT);
         String substring = url.toString().substring(0, url.toString().indexOf("?"));
@@ -96,12 +99,13 @@ public class COSClientInit {
 
     /**
      * 下载腾讯云文件到本地磁盘
-     * @param bucketName        存储桶名称
-     * @param key               对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
-     * @param localTmpPath      本地存储目录
+     *
+     * @param bucketName   存储桶名称
+     * @param key          对象键（Key）是对象在存储桶中的唯一标识。例如，在对象的访问域名 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/picture.jpg 中，对象键为 images/picture.jpg
+     * @param localTmpPath 本地存储目录
      * @return
      */
-    public static ObjectMetadata downFile(String bucketName , String key, String localTmpPath){
+    public static ObjectMetadata downFile(String bucketName, String key, String localTmpPath) {
         File downFile = new File(localTmpPath);
         GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, key);
         return COSClientInit.CreateCOSClient().getObject(getObjectRequest, downFile);
@@ -109,10 +113,11 @@ public class COSClientInit {
 
     /**
      * 删除文件
-     * @param bucketName        存储桶名称
-     * @param key               指定被删除的文件在 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示删除位于 folder 路径下的文件 picture.jpg
+     *
+     * @param bucketName 存储桶名称
+     * @param key        指定被删除的文件在 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示删除位于 folder 路径下的文件 picture.jpg
      */
-    public static void deleteFile(String bucketName , String key){
+    public static void deleteFile(String bucketName, String key) {
         COSClientInit.CreateCOSClient().deleteObject(bucketName, key);
     }
 }

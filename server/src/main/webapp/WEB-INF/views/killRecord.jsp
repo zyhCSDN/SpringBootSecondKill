@@ -10,16 +10,20 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-body">
-            <h2>当前用户名：</h2><h2 class="text-danger">${info.userName}</h2>
+            <h2>当前用户名：</h2>
+            <h2 class="text-danger">${info.userName}</h2>
         </div>
         <div class="panel-body">
-            <h2>抢购的商品名称：</h2><h2 class="text-danger">${info.itemName}</h2>
+            <h2>抢购的商品名称：</h2>
+            <h2 class="text-danger">${info.itemName}</h2>
         </div>
         <div class="panel-body">
-            <h2>订单编号：</h2><h2 class="text-danger">${info.code}</h2>
+            <h2>订单编号：</h2>
+            <h2 class="text-danger">${info.code}</h2>
         </div>
         <div class="panel-body">
-            <h2>成功抢购的时间：</h2><h2 class="text-danger"><fmt:formatDate value="${info.createTime}" pattern='yyyy-MM-dd HH:mm:ss'/></h2>
+            <h2>成功抢购的时间：</h2>
+            <h2 class="text-danger"><fmt:formatDate value="${info.createTime}" pattern='yyyy-MM-dd HH:mm:ss'/></h2>
         </div>
         <div class="panel-body">
             <h2>当前支付的状态：</h2>
@@ -29,7 +33,7 @@
                         已成功付款
                     </c:when>
                     <c:otherwise>
-<%--                        未支付或已取消--%>
+                        <%--                        未支付或已取消--%>
                         未支付
                     </c:otherwise>
                 </c:choose>
@@ -38,9 +42,9 @@
     </div>
     <table>
         <tr>
-<%--            <td><strong><input type="button" value="点击生成二维码进行支付" style="font-size: 30px;width: 1100px;height: auto;background-color: #28a4c9;"--%>
-<%--                               onclick="QrCode()"/></strong></td>--%>
-             <a class="btn btn-info" href="${ctx}/qr/code/generate/v3/${info.code}" target="_blank">点击生成二维码进行支付</a>
+            <%--            <td><strong><input type="button" value="点击生成二维码进行支付" style="font-size: 30px;width: 1100px;height: auto;background-color: #28a4c9;"--%>
+            <%--                               onclick="QrCode()"/></strong></td>--%>
+            <a class="btn btn-info" href="${ctx}/qr/code/generate/v3/${info.code}" target="_blank">点击生成二维码进行支付</a>
         </tr>
     </table>
 </div>
@@ -60,9 +64,9 @@
             contentType: "application/json;charset=utf-8",
             data: "",
             dataType: "json",
-            success: function(res){
-                if (res.code==0) {
-                    window.location.href="${ctx}/qr/code/success"
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.href = "${ctx}/qr/code/success"
                 }
             },
             error: function (message) {
@@ -71,14 +75,15 @@
             }
         });
     }
+
     function getJsonData() {
-        var killId=$("#killId").val();
+        var killId = $("#killId").val();
         /*var data = {
             "killId":killId,
             "userId":10
         };*/
         var data = {
-            "killId":killId
+            "killId": killId
         };
         return data;
     }

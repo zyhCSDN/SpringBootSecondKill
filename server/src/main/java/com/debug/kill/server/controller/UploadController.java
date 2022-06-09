@@ -31,28 +31,30 @@ import java.util.Random;
 public class UploadController {
 
     public static final String LOCALPATH = "D:/data/file/";
+
     /**
      * 上传用户图片
+     *
      * @param file
-     * @author sunran
      * @return
+     * @author sunran
      */
     @ResponseBody
     @RequestMapping("/uploadV1")
-    public BaseResponse uploadPicture(@RequestParam(value="file",required=false) MultipartFile file) throws IOException {
-        BaseResponse response=new BaseResponse(StatusCode.SUCCESS);
-        if (file==null){
-           throw new GlobalException(StatusCode.INVALID_PARAMS);
+    public BaseResponse uploadPicture(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        BaseResponse response = new BaseResponse(StatusCode.SUCCESS);
+        if (file == null) {
+            throw new GlobalException(StatusCode.INVALID_PARAMS);
         }
         //上传最大为1MB
-        int maxSize = 1024*1024*1;
-        if (file.getSize()>maxSize) {
+        int maxSize = 1024 * 1024 * 1;
+        if (file.getSize() > maxSize) {
             response.setMsg("最大上传限制1Mb");
             return response;
         }
         //获取文件名加后缀
-        String fileName=file.getOriginalFilename();
-        if(fileName!=null&&fileName!=""){
+        String fileName = file.getOriginalFilename();
+        if (fileName != null && fileName != "") {
             //文件后缀
             String fileF = fileName.substring(fileName.lastIndexOf("."));
             if (!(fileF.equals(".jpg") || fileF.equals(".jpeg") || fileF.equals(".png") || fileF.equals(".image"))) {
@@ -60,12 +62,12 @@ public class UploadController {
                 return response;
             }
             //新的文件名
-            fileName=System.currentTimeMillis()+"_"+new Random().nextInt(1000)+fileF;
+            fileName = System.currentTimeMillis() + "_" + new Random().nextInt(1000) + fileF;
             //以流形式上传 以文件形式必须本地有文件
             InputStream inputStream = file.getInputStream();
             try {
                 String url = COSClientInit.uploadFileV1(inputStream, "images/" + fileName);
-                System.out.println("图片上传成功 url:"+url);
+                System.out.println("图片上传成功 url:" + url);
                 response.setData(url);
             } catch (Exception e) {
                 e.printStackTrace();

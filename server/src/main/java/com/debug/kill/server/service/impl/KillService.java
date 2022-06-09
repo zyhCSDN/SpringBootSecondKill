@@ -38,9 +38,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class KillService implements IKillService {
 
-    private static final Logger log= LoggerFactory.getLogger(KillService.class);
+    private static final Logger log = LoggerFactory.getLogger(KillService.class);
 
-    private SnowFlake snowFlake=new SnowFlake(2,3);
+    private SnowFlake snowFlake = new SnowFlake(2, 3);
 
     @Autowired
     private ItemKillSuccessMapper itemKillSuccessMapper;
@@ -70,6 +70,7 @@ public class KillService implements IKillService {
 
     /**
      * 商品秒杀核心业务逻辑的处理
+     *
      * @param killId
      * @param userId
      * @return
@@ -77,24 +78,24 @@ public class KillService implements IKillService {
      */
     @Override
     public Boolean killItem(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
         //TODO:判断当前用户是否已经抢购了当前商品
-        if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
+        if (itemKillSuccessMapper.countByKillUserId(killId, userId) <= 0) {
             //TODO:判断当前代抢购的商品库存是否充足、以及是否出在可抢的时间段内 - canKill
-            ItemKill itemKill=itemKillMapper.selectById(killId);
-            if (itemKill!=null && 1==itemKill.getCanKill()){
+            ItemKill itemKill = itemKillMapper.selectById(killId);
+            if (itemKill != null && 1 == itemKill.getCanKill()) {
 
                 //TODO:扣减库存-减1
-                int res=itemKillMapper.updateKillItem(killId);
-                if (res>0){
+                int res = itemKillMapper.updateKillItem(killId);
+                if (res > 0) {
                     //TODO:判断是否扣减成功了?是-生成秒杀成功的订单、同时通知用户秒杀已经成功（在一个通用的方法里面实现）
-                    this.commonRecordKillSuccessInfo(itemKill,userId);
+                    this.commonRecordKillSuccessInfo(itemKill, userId);
 
-                    result=true;
+                    result = true;
                 }
             }
-        }else{
+        } else {
             throw new Exception("您已经抢购过该商品了！");
         }
 
@@ -102,20 +103,17 @@ public class KillService implements IKillService {
     }
 
 
-
-
-
-
     /**
      * 通用的方法-记录用户秒杀成功后生成的订单-并进行异步邮件消息的通知
+     *
      * @param kill
      * @param userId
      * @throws Exception
      */
-    private void commonRecordKillSuccessInfo(ItemKill kill, Integer userId) throws Exception{
+    private void commonRecordKillSuccessInfo(ItemKill kill, Integer userId) throws Exception {
         //TODO:记录抢购成功后生成的秒杀订单记录
-        ItemKillSuccess entity=new ItemKillSuccess();
-        String orderNo=String.valueOf(snowFlake.nextId());
+        ItemKillSuccess entity = new ItemKillSuccess();
+        String orderNo = String.valueOf(snowFlake.nextId());
 //        entity.setCode(RandomUtil.generateOrderCode());   //传统时间戳+N位随机数
         entity.setCode(orderNo); //雪花算法
         entity.setItemId(kill.getItemId());
@@ -126,12 +124,12 @@ public class KillService implements IKillService {
         entity.setStatus(SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue());
         entity.setCreateTime(DateTime.now().toDate());
         //TODO:学以致用，举一反三 -> 仿照单例模式的双重检验锁写法
-        if (itemKillSuccessMapper.countByKillUserId(kill.getId(),userId) <= 0){
-            int res=itemKillSuccessMapper.insertSelective(entity);
-            if (res>0){
+        if (itemKillSuccessMapper.countByKillUserId(kill.getId(), userId) <= 0) {
+            int res = itemKillSuccessMapper.insertSelective(entity);
+            if (res > 0) {
                 //TODO:进行异步邮件消息的通知=rabbitmq+mail
                 //没有付款的发送邮件提醒付款
-                if(entity.getStatus()==SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue()){
+                if (entity.getStatus() == SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue()) {
                     rabbitSenderService.sendKillSuccessEmailMsg(orderNo);
                     //TODO:入死信队列，用于 “失效” 超过指定的TTL时间时仍然未支付的订单
                     rabbitSenderService.sendKillSuccessOrderExpireMsg(orderNo);
@@ -141,9 +139,9 @@ public class KillService implements IKillService {
     }
 
 
-
     /**
      * 商品秒杀核心业务逻辑的处理-mysql的优化
+     *
      * @param killId
      * @param userId
      * @return
@@ -151,31 +149,30 @@ public class KillService implements IKillService {
      */
     @Override
     public Boolean killItemV2(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
         //TODO:判断当前用户是否已经抢购过当前商品
-        if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
+        if (itemKillSuccessMapper.countByKillUserId(killId, userId) <= 0) {
             //TODO:A.查询待秒杀商品详情
-            ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
+            ItemKill itemKill = itemKillMapper.selectByIdV2(killId);
 
             //TODO:判断是否可以被秒杀canKill=1?
-            if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
+            if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0) {
                 //TODO:B.扣减库存-减一
-                int res=itemKillMapper.updateKillItemV2(killId);
+                int res = itemKillMapper.updateKillItemV2(killId);
 
                 //TODO:扣减是否成功?是-生成秒杀成功的订单，同时通知用户秒杀成功的消息
-                if (res>0){
-                    commonRecordKillSuccessInfo(itemKill,userId);
+                if (res > 0) {
+                    commonRecordKillSuccessInfo(itemKill, userId);
 
-                    result=true;
+                    result = true;
                 }
             }
-        }else{
+        } else {
             throw new Exception("您已经抢购过该商品了!");
         }
         return result;
     }
-
 
 
     @Autowired
@@ -184,6 +181,7 @@ public class KillService implements IKillService {
 
     /**
      * 商品秒杀核心业务逻辑的处理-redis的分布式锁
+     *
      * @param killId
      * @param userId
      * @return
@@ -191,53 +189,51 @@ public class KillService implements IKillService {
      */
     @Override
     public Boolean killItemV3(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
-        if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
+        if (itemKillSuccessMapper.countByKillUserId(killId, userId) <= 0) {
 
             //TODO:借助Redis的原子操作实现分布式锁-对共享操作-资源进行控制
-            ValueOperations valueOperations=stringRedisTemplate.opsForValue();
-            final String key=new StringBuffer().append(killId).append(userId).append("-RedisLock").toString();
-            final String value=RandomUtil.generateOrderCode();
-            Boolean cacheRes=valueOperations.setIfAbsent(key,value); //lua脚本提供“分布式锁服务”，就可以写在一起
+            ValueOperations valueOperations = stringRedisTemplate.opsForValue();
+            final String key = new StringBuffer().append(killId).append(userId).append("-RedisLock").toString();
+            final String value = RandomUtil.generateOrderCode();
+            Boolean cacheRes = valueOperations.setIfAbsent(key, value); //lua脚本提供“分布式锁服务”，就可以写在一起
             //TOOD:redis部署节点宕机了
-            if (cacheRes){
-                stringRedisTemplate.expire(key,30, TimeUnit.SECONDS);
+            if (cacheRes) {
+                stringRedisTemplate.expire(key, 30, TimeUnit.SECONDS);
 
                 try {
-                    ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
-                        int res=itemKillMapper.updateKillItemV2(killId);
-                        if (res>0){
-                            commonRecordKillSuccessInfo(itemKill,userId);
+                    ItemKill itemKill = itemKillMapper.selectByIdV2(killId);
+                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0) {
+                        int res = itemKillMapper.updateKillItemV2(killId);
+                        if (res > 0) {
+                            commonRecordKillSuccessInfo(itemKill, userId);
 
-                            result=true;
+                            result = true;
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     throw new Exception("还没到抢购日期、已过了抢购时间或已被抢购完毕！");
-                }finally {
-                    if (value.equals(valueOperations.get(key).toString())){
+                } finally {
+                    if (value.equals(valueOperations.get(key).toString())) {
                         stringRedisTemplate.delete(key);
                     }
                 }
             }
-        }else{
+        } else {
             throw new Exception("Redis-您已经抢购过该商品了!");
         }
         return result;
     }
 
 
-
-
     @Autowired
     private RedissonClient redissonClient;
 
     /**
-     *
      * Redisson 的 WatchDog 看门狗自动延期机制
      * 商品秒杀核心业务逻辑的处理-redisson的分布式锁
+     *
      * @param killId
      * @param userId
      * @return
@@ -245,11 +241,11 @@ public class KillService implements IKillService {
      */
     @Override
     public Boolean killItemV4(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
-        final String lockKey=new StringBuffer().append(killId).append(userId).append("-RedisSonLock").toString();
-       //给lockKey字段加锁
-        RLock lock=redissonClient.getLock(lockKey);
+        final String lockKey = new StringBuffer().append(killId).append(userId).append("-RedisSonLock").toString();
+        //给lockKey字段加锁
+        RLock lock = redissonClient.getLock(lockKey);
 
         // https://blog.csdn.net/u012693016/article/details/108244005 分布式锁案例可以看
         // https://www.cnblogs.com/nov5026/p/10764068.html 分布式锁实现原理可以看
@@ -279,27 +275,27 @@ public class KillService implements IKillService {
 
             //TODO:第一个参数30s=表示尝试获取分布式锁，并且最大的等待获取锁的时间为30s
             //TODO:第二个参数10s=表示上锁之后，10s内操作完毕将自动释放锁 防止死锁
-            Boolean cacheRes=lock.tryLock(50,10,TimeUnit.SECONDS);
-            if (cacheRes){
+            Boolean cacheRes = lock.tryLock(50, 10, TimeUnit.SECONDS);
+            if (cacheRes) {
                 log.info("线程" + Thread.currentThread().getName() + "加锁" + lock.getName() + "成功");
                 log.info("获取RedissonLock分布式锁[成功],lockName={}", lock.getName());
                 //TODO:核心业务逻辑的处理
-                if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
-                    ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
-                        int res=itemKillMapper.updateKillItemV2(killId);
-                        if (res>0){
-                            commonRecordKillSuccessInfo(itemKill,userId);
-                            result=true;
+                if (itemKillSuccessMapper.countByKillUserId(killId, userId) <= 0) {
+                    ItemKill itemKill = itemKillMapper.selectByIdV2(killId);
+                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0) {
+                        int res = itemKillMapper.updateKillItemV2(killId);
+                        if (res > 0) {
+                            commonRecordKillSuccessInfo(itemKill, userId);
+                            result = true;
                         }
                     }
-                }else{
+                } else {
                     log.error("redisson-您已经抢购过该商品了!");
                 }
-            }else {
+            } else {
                 log.info("获取RedisSonLock分布式锁[失败],lockName={}", lock.getName());
             }
-        }finally {
+        } finally {
             //TODO:释放锁
             lock.unlock();
             //lock.forceUnlock();
@@ -314,7 +310,7 @@ public class KillService implements IKillService {
 //    @Autowired
 //    private CuratorFramework curatorFramework;
 
-    private static final String pathPrefix="/kill/zkLock/";
+    private static final String pathPrefix = "/kill/zkLock/";
 
 //    /**
 //     * 商品秒杀核心业务逻辑的处理-基于ZooKeeper的分布式锁
@@ -356,19 +352,18 @@ public class KillService implements IKillService {
 //    }
 
 
-
-
     /**
      * 模拟判断订单支付成功或未付款，成功失败随机
+     *
      * @param
      * @return
      */
-    public static byte checkPay(){
+    public static byte checkPay() {
         Random random = new Random();
 //        该方法的作用是生成一个随机的int值，该值介于[0,n)的区间，也就是0到n之间的随机int值，包含0而不包含n。
-        byte res = (byte)random.nextInt(2);
-        log.info("res======================"+  res  );
-      return res;
+        byte res = (byte) random.nextInt(2);
+        log.info("res======================" + res);
+        return res;
     }
 
 //    public static void main(String[] args) {
@@ -376,24 +371,24 @@ public class KillService implements IKillService {
 //    }
 
 
-
     /**
      * 检查用户的秒杀结果
+     *
      * @param killId
      * @param userId
      * @return
      * @throws Exception
      */
     @Override
-    public Map<String,Object> checkUserKillResult(Integer killId, Integer userId) throws Exception {
-        Map<String,Object> dataMap= Maps.newHashMap();
-        List<KillSuccessUserInfo> infoList=itemKillSuccessMapper.selectByKillIdUserId(killId,userId);
-        if (!infoList.isEmpty() && infoList.size()>0){
+    public Map<String, Object> checkUserKillResult(Integer killId, Integer userId) throws Exception {
+        Map<String, Object> dataMap = Maps.newHashMap();
+        List<KillSuccessUserInfo> infoList = itemKillSuccessMapper.selectByKillIdUserId(killId, userId);
+        if (!infoList.isEmpty() && infoList.size() > 0) {
             for (KillSuccessUserInfo info : infoList) {
-                dataMap.put("executeResult",String.format(env.getProperty("notice.kill.item.success.content"),info.getItemName()));
-                dataMap.put("info",info);
+                dataMap.put("executeResult", String.format(env.getProperty("notice.kill.item.success.content"), info.getItemName()));
+                dataMap.put("info", info);
             }
-        }else{
+        } else {
             throw new Exception(env.getProperty("notice.kill.item.fail.content"));
         }
         return dataMap;

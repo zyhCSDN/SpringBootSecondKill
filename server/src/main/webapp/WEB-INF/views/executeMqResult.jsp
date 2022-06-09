@@ -33,7 +33,7 @@
 
     $(function () {
         //等待一定的时间再查询显示结果-给后端赢得足够的时间
-        setTimeout(showResult,3000);
+        setTimeout(showResult, 3000);
     });
     // $(function () {
     //     //等待一定的时间再查询显示结果-给后端赢得足够的时间
@@ -41,16 +41,16 @@
     // });
 
     function showResult() {
-        var killId=$("#killId").val();
-        var userId=$("#userId").val();
+        var killId = $("#killId").val();
+        var userId = $("#userId").val();
         $.ajax({
             type: "GET",
-            url: "${ctx}/kill/execute/mq/result?killId="+killId+"&userId="+userId,
-            success: function(res){
-                if (res.code==0) {
+            url: "${ctx}/kill/execute/mq/result?killId=" + killId + "&userId=" + userId,
+            success: function (res) {
+                if (res.code == 0) {
                     $("#executeResult").html(res.data.executeResult);
                     $("#waitResult").html("");
-                }else{
+                } else {
                     $("#executeResult").html(res.msg);
                 }
             },

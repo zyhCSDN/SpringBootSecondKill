@@ -36,7 +36,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
      * @return
      */
     @Bean
-    public Docket createRestApi(){
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .enable(true)
@@ -52,8 +52,10 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts());
     }
+
     /**
      * 配置swagger2的静态资源路径
+     *
      * @param registry
      */
     @Override
@@ -94,11 +96,12 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
         return securityReferences;
     }
+
     /**
      * 创建该API的基本信息（这些基本信息会展现在文档页面中）
      * 访问地址：http://项目实际地址/swagger-ui.html
-     *
-     *
+     * <p>
+     * <p>
      * 把Swagger2的API接口导入Postman 复制 http://127.0.0.1:8092/v2/api-docs  打开postman-->import-->import Form Link
      *
      * @return

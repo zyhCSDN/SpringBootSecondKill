@@ -6,14 +6,15 @@ package com.debug.kill.model.dto;
  */
 
 public class Person {
-    String  name = "AAA",
+    String name = "AAA",
             gender = "女",
-            gender5= "女";
+            gender5 = "女";
 
-    String name1 ="aaaa";
-    String gender1 ="男";
+    String name1 = "aaaa";
+    String gender1 = "男";
 
     int age = 22;
+
     @Override
     public String toString() {
         return "[name=" + name + ", age=" + age + ", gender=" + gender + "]";

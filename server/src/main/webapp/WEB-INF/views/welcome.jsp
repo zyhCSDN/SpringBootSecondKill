@@ -12,9 +12,9 @@
     <title>首页</title>
 </head>
 <body>
-    <h1>这他妈是欢迎页面</h1>
-    <br/>
-    ${name}
-    <%--<c:out value="${name}"></c:out>--%>
+<h1>这他妈是欢迎页面</h1>
+<br/>
+${name}
+<%--<c:out value="${name}"></c:out>--%>
 </body>
 </html>

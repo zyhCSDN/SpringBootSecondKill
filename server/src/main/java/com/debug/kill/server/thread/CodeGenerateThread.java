@@ -10,7 +10,7 @@ import com.debug.kill.server.utils.RandomUtil;
  * @Author:debug (SteadyJack)
  * @Date: 2019/7/11 10:30
  **/
-public class CodeGenerateThread implements Runnable{
+public class CodeGenerateThread implements Runnable {
 
     private RandomCodeMapper randomCodeMapper;
 
@@ -20,7 +20,7 @@ public class CodeGenerateThread implements Runnable{
 
     @Override
     public void run() {
-        RandomCode entity=new RandomCode();
+        RandomCode entity = new RandomCode();
         entity.setCode(RandomUtil.generateOrderCode());
         randomCodeMapper.insertSelective(entity);
     }

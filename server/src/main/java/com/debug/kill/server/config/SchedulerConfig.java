@@ -10,11 +10,12 @@ import java.util.concurrent.Executors;
 
 /**
  * 定时任务多线程处理的通用化配置
+ *
  * @Author:debug (SteadyJack)
  * @Date: 2019/6/29 21:45
  **/
 @Configuration
-public class SchedulerConfig implements SchedulingConfigurer{
+public class SchedulerConfig implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {

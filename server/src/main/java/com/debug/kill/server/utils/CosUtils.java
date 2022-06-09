@@ -194,8 +194,8 @@ public class CosUtils {
     public static void download() {
         try {
             //下载到本地指定路径
-            File localDownFile = new File("downLoad/Images/"+key);
-            if (!localDownFile.exists()){
+            File localDownFile = new File("downLoad/Images/" + key);
+            if (!localDownFile.exists()) {
                 localDownFile.getParentFile().mkdirs();
             }
             GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName + "-" + appId, key);

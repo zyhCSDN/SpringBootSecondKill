@@ -17,7 +17,8 @@
             <h2 class="text-danger">剩余数量：${detail.total}</h2>
         </div>
         <div class="panel-body">
-            <h2 class="text-danger">开始时间：<fmt:formatDate value="${detail.startTime}" pattern='yyyy-MM-dd HH:mm:ss'/></h2>
+            <h2 class="text-danger">开始时间：<fmt:formatDate value="${detail.startTime}"
+                                                         pattern='yyyy-MM-dd HH:mm:ss'/></h2>
         </div>
         <div class="panel-body">
             <h2 class="text-danger">结束时间：<fmt:formatDate value="${detail.endTime}" pattern='yyyy-MM-dd HH:mm:ss'/></h2>
@@ -47,33 +48,34 @@
 <link rel="stylesheet" href="${ctx}/static/css/detail.css" type="text/css">
 <script type="text/javascript">
     function executeKill() {
-            $.ajax({
-                type: "POST",
-                url: "${ctx}/kill/execute",
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify(getJsonData()),
-                dataType: "json",
-                success: function(res){
-                    if (res.code==0) {
-                        window.location.href="${ctx}/kill/execute/success"
-                    }else{
-                        window.location.href="${ctx}/kill/execute/fail"
-                    }
-                },
-                error: function (message) {
-                    alert("提交数据失败！");
-                    return;
+        $.ajax({
+            type: "POST",
+            url: "${ctx}/kill/execute",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(getJsonData()),
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.href = "${ctx}/kill/execute/success"
+                } else {
+                    window.location.href = "${ctx}/kill/execute/fail"
                 }
-            });
+            },
+            error: function (message) {
+                alert("提交数据失败！");
+                return;
+            }
+        });
     }
+
     function getJsonData() {
-        var killId=$("#killId").val();
+        var killId = $("#killId").val();
         /*var data = {
             "killId":killId,
             "userId":10
         };*/
         var data = {
-            "killId":killId
+            "killId": killId
         };
         return data;
     }
@@ -86,11 +88,11 @@
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify(getJsonData()),
             dataType: "json",
-            success: function(res){
-                if (res.code==0) {
-                    window.location.href="${ctx}/kill/execute/mq/to/result?killId="+$("#killId").val()
-                }else{
-                    window.location.href="${ctx}/kill/execute/fail"
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.href = "${ctx}/kill/execute/mq/to/result?killId=" + $("#killId").val()
+                } else {
+                    window.location.href = "${ctx}/kill/execute/fail"
                 }
             },
             error: function (message) {

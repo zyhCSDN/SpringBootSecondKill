@@ -18,15 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * 二维码工具
+ *
  * @author ZhaoYongHeng
  * @date 2020/12/8
  */
 
 @Slf4j
 public class QRCodeUtil {
-
 
 
     //CODE_WIDTH：二维码宽度，单位像素
@@ -45,7 +44,7 @@ public class QRCodeUtil {
                 return;
             }
             content = content.trim();
-            if (codeImgFileSaveDir==null || codeImgFileSaveDir.isFile()) {
+            if (codeImgFileSaveDir == null || codeImgFileSaveDir.isFile()) {
                 //二维码图片存在目录为空，默认放在桌面...
                 codeImgFileSaveDir = FileSystemView.getFileSystemView().getHomeDirectory();
             }
@@ -70,7 +69,8 @@ public class QRCodeUtil {
      * 生成二维码并输出到输出流, 通常用于输出到网页上进行显示，输出到网页与输出到磁盘上的文件中，区别在于最后一句 ImageIO.write
      * write(RenderedImage im,String formatName,File output)：写到文件中
      * write(RenderedImage im,String formatName,OutputStream output)：输出到输出流中
-     * @param content  ：二维码内容
+     *
+     * @param content      ：二维码内容
      * @param outputStream ：输出流，比如 HttpServletResponse 的 getOutputStream
      * @return
      */
@@ -96,7 +96,7 @@ public class QRCodeUtil {
     private static BufferedImage getBufferedImage(String content) throws WriterException {
 
         //com.google.zxing.EncodeHintType：编码提示类型,枚举类型
-        Map< EncodeHintType, Object> hints = new HashMap();
+        Map<EncodeHintType, Object> hints = new HashMap();
 
         //EncodeHintType.CHARACTER_SET：设置字符编码类型
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");

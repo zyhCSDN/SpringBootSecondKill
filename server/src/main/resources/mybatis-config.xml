@@ -22,7 +22,7 @@
     <!-- Continue going here -->
 
     <!--<typeAliases>-->
-        <!--<package name="cn.com.countrygarden.ucenter.entity"/>-->
+    <!--<package name="cn.com.countrygarden.ucenter.entity"/>-->
     <!--</typeAliases>-->
     <plugins>
         <!-- com.github.pagehelper为PageHelper类所在包名 -->
@@ -56,14 +56,14 @@
     </plugins>
 
     <!--<mappers>-->
-        <!--&lt;!&ndash;<package name="cn.com.countrygarden.ucenter.mapper" />&ndash;&gt;-->
-        <!--<mapper resource="mappers/DiaryMapper.xml"/>-->
-        <!--<mapper resource="mappers/EmpEvaluateMapper.xml"/>-->
-        <!--<mapper resource="mappers/EmployeeMapper.xml"/>-->
-        <!--<mapper resource="mappers/LikesMapper.xml"/>-->
-        <!--<mapper resource="mappers/PicMapper.xml"/>-->
-        <!--<mapper resource="mappers/RepliesMapper.xml"/>-->
-        <!--<mapper resource="mappers/TeamMapper.xml"/>-->
-        <!--<mapper resource="mappers/UserMapper.xml"/>-->
+    <!--&lt;!&ndash;<package name="cn.com.countrygarden.ucenter.mapper" />&ndash;&gt;-->
+    <!--<mapper resource="mappers/DiaryMapper.xml"/>-->
+    <!--<mapper resource="mappers/EmpEvaluateMapper.xml"/>-->
+    <!--<mapper resource="mappers/EmployeeMapper.xml"/>-->
+    <!--<mapper resource="mappers/LikesMapper.xml"/>-->
+    <!--<mapper resource="mappers/PicMapper.xml"/>-->
+    <!--<mapper resource="mappers/RepliesMapper.xml"/>-->
+    <!--<mapper resource="mappers/TeamMapper.xml"/>-->
+    <!--<mapper resource="mappers/UserMapper.xml"/>-->
     <!--</mappers>-->
 </configuration>

@@ -3,7 +3,6 @@ package com.debug.kill.server.exception;
 import com.debug.kill.api.enums.StatusCode;
 
 /**
- *
  * @author:ZHAOYONGHENG
  * @date:2021/12/2
  * @version:1.0.0

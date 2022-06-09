@@ -4,6 +4,6 @@
     <title>首页</title>
 </head>
 <body>
-    <h1>${code}</h1>
+<h1>${code}</h1>
 </body>
 </html>

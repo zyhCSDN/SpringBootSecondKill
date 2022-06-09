@@ -16,7 +16,7 @@
             <h2>商城高并发抢单/Java秒杀系统-秒杀商品列表</h2>
         </div>
         <div class="panel-heading text-center">
-            <h2> <a class="btn btn-info" href="${ctx}/logout" target="_blank">退出</a></h2>
+            <h2><a class="btn btn-info" href="${ctx}/logout" target="_blank">退出</a></h2>
         </div>
 
         <div class="panel-body">
